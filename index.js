@@ -3,8 +3,6 @@
 const jwtAuth = require('hapi-auth-jwt2');
 const bearerAuth = require('hapi-auth-bearer-token');
 
-const allowedStrategies = ['jwt', 'bearer'];
-
 /**
  * @typedef {Object} JwtOptions
  * @property {string} publicKey
@@ -89,20 +87,33 @@ const registerBearer = function(server, options) {
 /**
  * @param {Object} server
  * @param {AuthOptions} options
- * @return {Promise}
+ * @param {function} next
  */
-exports.register = function(server, options = {}) {
-    const defaultAuth = Object.assign({strategies: allowedStrategies}, options.defaultAuth);
-    return Promise.all([
-        registerJwt(server, options.jwt),
-        registerBearer(server, options.bearer)
-    ])
+module.exports.register = function(server, options, next) {
+    const strategies = [];
+    const defaultAuth = {
+        strategies: []
+    };
+
+    if (options.jwt) {
+        strategies.push(registerJwt(server, options.jwt));
+        defaultAuth.strategies.push('jwt');
+    }
+
+    if (options.bearer) {
+        strategies.push(registerBearer(server, options.bearer));
+        defaultAuth.strategies.push('bearer');
+    }
+
+    Promise.all(strategies)
         .then(() => {
-            server.auth.default(defaultAuth);
+            server.auth.default(Object.assign(defaultAuth, options.defaultAuth));
             return null;
-        });
+        })
+        .then(next)
+        .catch(next);
 };
 
-exports.register.attributes = {
+module.exports.register.attributes = {
     pkg: require('./package.json')
 };
