@@ -14,10 +14,11 @@ const allowedStrategies = ['jwt', 'bearer'];
 /**
  * @typedef {Object} BearerOptions
  * @property {Object.<string, string>} tokens
+ * @property {string} defaultRole
  */
 /**
  * @typedef {Object} AuthOptions
- * @property {AuthOptions} default Default auth options
+ * @property {Object} defaultAuth
  * @property {JwtOptions} jwt
  * @property {BearerOptions} bearer
  */
@@ -77,7 +78,7 @@ const registerBearer = function(server, options) {
                     if (options.tokens.hasOwnProperty(token)) {
                         return callback(null, true, {
                             newsroom: options.tokens[token],
-                            role: options.role
+                            role: options.defaultRole || DEFAULT_ROLE
                         });
                     }
                     return callback(null, false);
@@ -95,13 +96,13 @@ const registerBearer = function(server, options) {
  * @return {Promise}
  */
 exports.register = function(server, options = {}) {
-    const defaults = Object.assign({strategies: allowedStrategies}, options.default);
+    const defaultAuth = Object.assign({strategies: allowedStrategies}, options.defaultAuth);
     return Promise.all([
         registerJwt(server, options.jwt),
-        registerBearer(server, Object.assign({role: DEFAULT_ROLE}, options.bearer))
+        registerBearer(server, options.bearer)
     ])
         .then(() => {
-            server.auth.default(defaults);
+            server.auth.default(defaultAuth);
             return null;
         });
 };
