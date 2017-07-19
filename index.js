@@ -3,8 +3,6 @@
 const jwtAuth = require('hapi-auth-jwt2');
 const bearerAuth = require('hapi-auth-bearer-token');
 
-const DEFAULT_ROLE = 'internal';
-
 const allowedStrategies = ['jwt', 'bearer'];
 
 /**
@@ -14,7 +12,6 @@ const allowedStrategies = ['jwt', 'bearer'];
 /**
  * @typedef {Object} BearerOptions
  * @property {Object.<string, string>} tokens
- * @property {string} defaultRole
  */
 /**
  * @typedef {Object} AuthOptions
@@ -77,8 +74,7 @@ const registerBearer = function(server, options) {
                 validateFunc: (token, callback) => {
                     if (options.tokens.hasOwnProperty(token)) {
                         return callback(null, true, {
-                            newsroom: options.tokens[token],
-                            role: options.defaultRole || DEFAULT_ROLE
+                            newsroom: options.tokens[token]
                         });
                     }
                     return callback(null, false);
