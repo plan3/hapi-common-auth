@@ -24,5 +24,4 @@ server.register({
         }
     }
 });
-
 ```
