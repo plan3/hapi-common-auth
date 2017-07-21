@@ -16,7 +16,6 @@ const commonAuth = require('hapi-common-auth');
 server.register({
     register: commonAuth,
     options: {
-        'default': ['jwt', 'bearer'],
         jwt: {
             publicKey: '...'
         },
@@ -25,5 +24,4 @@ server.register({
         }
     }
 });
-
 ```

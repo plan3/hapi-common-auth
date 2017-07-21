@@ -1,24 +1,23 @@
 {
-  "name": "hapi-common-auth",
+  "name": "@plan3-relate/hapi-common-auth",
   "version": "1.0.0",
-  "description": "",
+  "description": "A wrapper for Hapi.js auth",
   "main": "index.js",
   "scripts": {
-    "pretest": "npm run lint && npm run nsp",
-    "test": "env $(cat test.env | xargs) mocha",
+    "test": "npm run lint && npm run nsp",
     "lint": "eslint .",
     "nsp": "nsp check"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/plan3/cls-named-logger.git"
+    "url": "git+https://github.com/plan3/hapi-common-auth.git"
   },
   "keywords": [
     "hapi",
     "auth"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "Schibsted Media",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/plan3/hapi-common-auth/issues"
   },
@@ -27,13 +26,13 @@
     "hapi-auth-bearer-token": "5.0.0",
     "hapi-auth-jwt2": "7.2.4"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
-    "chai": "4.1.0",
     "eslint": "4.2.0",
     "eslint-config-vgno": "7.0.0",
     "eslint-plugin-promise": "3.5.0",
-    "hapi": "^16.4.3",
-    "mocha": "3.4.2",
     "nsp": "2.6.3"
   }
 }

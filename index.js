@@ -23,7 +23,8 @@ const bearerAuth = require('hapi-auth-bearer-token');
  * @return {string}
  */
 const base64toPem = function(base64) {
-    for (var result = '', lines = 0; result.length - lines < base64.length; lines++) {
+    let result = '';
+    for (let lines = 0; result.length - lines < base64.length; lines++) {
         result += base64.substr(result.length - lines, 64) + '\n';
     }
 
@@ -36,12 +37,8 @@ const base64toPem = function(base64) {
  * @return {Promise}
  */
 const registerJwt = function(server, options) {
-    return new Promise((resolve, reject) => {
-        server.register(jwtAuth, function(error) {
-            if (error) {
-                return reject(error);
-            }
-
+    return server.register(jwtAuth)
+        .then(() => {
             server.auth.strategy('jwt', 'jwt', {
                 key: base64toPem(options.publicKey),
                 validateFunc: (decoded, request, callback) => {
@@ -50,10 +47,8 @@ const registerJwt = function(server, options) {
                 verifyOptions: {algorithms: ['RS256', 'RS384', 'RS512']},
                 tokenType: 'Plan3JWT'
             });
-
-            return resolve();
+            return null;
         });
-    });
 };
 
 /**
@@ -62,12 +57,8 @@ const registerJwt = function(server, options) {
  * @return {Promise}
  */
 const registerBearer = function(server, options) {
-    return new Promise((resolve, reject) => {
-        server.register(bearerAuth, function(error) {
-            if (error) {
-                return reject(error);
-            }
-
+    return server.register(bearerAuth)
+        .then(() => {
             server.auth.strategy('bearer', 'bearer-access-token', {
                 validateFunc: (token, callback) => {
                     if (options.tokens.hasOwnProperty(token)) {
@@ -78,10 +69,8 @@ const registerBearer = function(server, options) {
                     return callback(null, false);
                 }
             });
-
-            return resolve();
+            return null;
         });
-    });
 };
 
 /**
