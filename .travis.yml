@@ -1,10 +1,15 @@
-# Required to run JDK8
 language: node_js
 node_js: 8
-
 script:
 - npm test
-
 branches:
   only:
   - master
+deploy:
+  provider: npm
+  email: billing.media@schibsted.media
+  on:
+    branch: master
+    node: '8'
+  api_key:
+    secure: IkeSB6R7vA6DHtYMwImNsb+a+Gkao4StHItJy96DXVm6bVzIbJfwHm7Iq3ejnYGZ8d3MPOr3rl+Df4oMC8cYuUG1iZdQi6igej3A9oAcTjXxHn6iRKv6SGPohLHrTauhptRRgnDk/7UuDfIinoqV8QDIgjJmhzc0Gdt+pk5LnrmkJo17pf7jIOZ4VadCTFZ40w2tCXCxKQ3Jf2ijrCDzNIXK2WMYyBKILeudt8Aj3XVCEpWS+o8k9vzP9VqZayulQAE9rgNhjANrE/5NXJkzTACosGtmmdKO4sKq4dVl3Z27iG00qEqhLlqTC4Vk67SswMh+d4AQK9Rs9bqB2Aa/TuAfNlqk+RXKl8eVhTR0mUK4B/RG5eLOzre+7k7kgW5iHd5YFh7GfACjyUraY+AL+HHMZ2D8N9R1Lsvn/PmkxgDz1c4g6ymweUofHLMHEqj7f32qJG9Jm+SCRR3MBe5bURuw38PGJ3RxEvrtmSQlS7upuijd2kZj43vRbRinr5qSL9BR3jPQMwlvfEoMxJ/52xqwKUpbhC7jPLXDlxu/N+HZpNFWKZJd+15OnBAFqx8Y20nSyJu8J68qL7YPvc7AXOGYwNmaSZFBfHzS6zgb6T0NZAbNOe55GgkJJRWJgfDHOqJ18Nn+Hoi1n89d/ntG699A8cUnAlEXRqSsxreGRYE=
