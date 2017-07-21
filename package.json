@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "pretest": "npm run lint && npm run nsp",
-    "test": "env $(cat test.env | xargs) mocha",
+    "test": "npm run lint && npm run nsp",
     "lint": "eslint .",
     "nsp": "nsp check"
   },
@@ -28,12 +27,9 @@
     "hapi-auth-jwt2": "7.2.4"
   },
   "devDependencies": {
-    "chai": "4.1.0",
     "eslint": "4.2.0",
     "eslint-config-vgno": "7.0.0",
     "eslint-plugin-promise": "3.5.0",
-    "hapi": "^16.4.3",
-    "mocha": "3.4.2",
     "nsp": "2.6.3"
   }
 }
