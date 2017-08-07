@@ -2,6 +2,7 @@
 
 const jwtAuth = require('hapi-auth-jwt2');
 const bearerAuth = require('hapi-auth-bearer-token');
+const Joi = require('joi');
 
 /**
  * @typedef {Object} JwtOptions
@@ -12,10 +13,15 @@ const bearerAuth = require('hapi-auth-bearer-token');
  * @property {Object.<string, string>} tokens
  */
 /**
+ * @typedef {Object} Plan3KeyOptions
+ * @property {Object.<string, string>} tokens
+ */
+/**
  * @typedef {Object} AuthOptions
  * @property {Object} defaultAuth
  * @property {JwtOptions} jwt
  * @property {BearerOptions} bearer
+ * @property {Plan3KeyOptions} plan3Key
  */
 
 /**
@@ -36,7 +42,7 @@ const base64toPem = function(base64) {
  * @param {JwtOptions} options
  * @return {Promise}
  */
-const registerJwt = function(server, options) {
+const registerJwtStrategy = function(server, options) {
     return server.register(jwtAuth)
         .then(() => {
             server.auth.strategy('jwt', 'jwt', {
@@ -52,14 +58,39 @@ const registerJwt = function(server, options) {
 };
 
 /**
+ * @param {Function} startWith
  * @param {Object} server
  * @param {BearerOptions} options
  * @return {Promise}
  */
-const registerBearer = function(server, options) {
-    return server.register(bearerAuth)
+const registerBearerStrategy = function(startWith, server, options) {
+    return startWith()
         .then(() => {
             server.auth.strategy('bearer', 'bearer-access-token', {
+                validateFunc: (token, callback) => {
+                    if (options.tokens.hasOwnProperty(token)) {
+                        return callback(null, true, {
+                            newsroom: options.tokens[token]
+                        });
+                    }
+                    return callback(null, false);
+                }
+            });
+            return null;
+        });
+};
+
+/**
+ * @param {Function} startWith
+ * @param {Object} server
+ * @param {Plan3KeyOptions} options
+ * @return {Promise}
+ */
+const registerPlan3KeyStrategy = function(startWith, server, options) {
+    return startWith()
+        .then(() => {
+            server.auth.strategy('plan3Key', 'bearer-access-token', {
+                tokenType: 'Plan3Key',
                 validateFunc: (token, callback) => {
                     if (options.tokens.hasOwnProperty(token)) {
                         return callback(null, true, {
@@ -79,19 +110,41 @@ const registerBearer = function(server, options) {
  * @param {function} next
  */
 module.exports.register = function(server, options, next) {
+    let bearerRegistered = false;
+    const registerBearer = function() {
+        if (bearerRegistered) {
+            return Promise.resolve();
+        }
+        bearerRegistered = true;
+        return server.register(bearerAuth);
+    };
+
+    const result = Joi.validate(options, require('./schemas'));
+    if (result.error) {
+        const error = new Error('Provided configuration is invalid');
+        error.previous = result.error;
+        next(error);
+        return;
+    }
+
     const strategies = [];
     const defaultAuth = {
         strategies: []
     };
 
     if (options.jwt) {
-        strategies.push(registerJwt(server, options.jwt));
+        strategies.push(registerJwtStrategy(server, options.jwt));
         defaultAuth.strategies.push('jwt');
     }
 
     if (options.bearer) {
-        strategies.push(registerBearer(server, options.bearer));
+        strategies.push(registerBearerStrategy(registerBearer, server, options.bearer));
         defaultAuth.strategies.push('bearer');
+    }
+
+    if (options.plan3Key) {
+        strategies.push(registerPlan3KeyStrategy(registerBearer, server, options.plan3Key));
+        defaultAuth.strategies.push('plan3Key');
     }
 
     Promise.all(strategies)

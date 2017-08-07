@@ -1,10 +1,10 @@
 {
   "name": "@plan3-relate/hapi-common-auth",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A wrapper for Hapi.js auth",
   "main": "index.js",
   "scripts": {
-    "test": "npm run lint && npm run nsp",
+    "test": "mocha test.js",
     "lint": "eslint .",
     "nsp": "nsp check"
   },
@@ -24,15 +24,19 @@
   "homepage": "https://github.com/plan3/hapi-common-auth#readme",
   "dependencies": {
     "hapi-auth-bearer-token": "5.0.0",
-    "hapi-auth-jwt2": "7.2.4"
+    "hapi-auth-jwt2": "7.2.4",
+    "joi": "10.6.0"
   },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
+    "chai": "4.1.0",
     "eslint": "4.2.0",
     "eslint-config-vgno": "7.0.0",
     "eslint-plugin-promise": "3.5.0",
+    "hapi": "16.5.2",
+    "mocha": "3.5.0",
     "nsp": "2.6.3"
   }
 }
