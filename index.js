@@ -11,12 +11,12 @@ const Joi = require('joi');
 /**
  * @typedef {Object} BearerOptions
  * @property {Object.<string, string>} tokens
- * @property {Object} credentials
+ * @property {Object} additionalCredentials
  */
 /**
  * @typedef {Object} Plan3KeyOptions
  * @property {Object.<string, string>} tokens
- * @property {Object} credentials
+ * @property {Object} additionalCredentials
  */
 /**
  * @typedef {Object} AuthOptions
@@ -71,11 +71,8 @@ const registerBearerStrategy = function(startWith, server, options) {
             server.auth.strategy('bearer', 'bearer-access-token', {
                 validateFunc: (token, callback) => {
                     if (options.tokens.hasOwnProperty(token)) {
-                        let credentials = {newsroom: options.tokens[token]};
-                        if (typeof options.credentials === 'object') {
-                            credentials = Object.assign(credentials, options.credentials);
-                        }
-                        return callback(null, true, credentials);
+                        return callback(null, true, Object.assign({newsroom: options.tokens[token]},
+                            options.additionalCredentials));
                     }
                     return callback(null, false);
                 }
@@ -97,11 +94,8 @@ const registerPlan3KeyStrategy = function(startWith, server, options) {
                 tokenType: 'Plan3Key',
                 validateFunc: (token, callback) => {
                     if (options.tokens.hasOwnProperty(token)) {
-                        let credentials = {newsroom: options.tokens[token]};
-                        if (typeof options.credentials === 'object') {
-                            credentials = Object.assign(credentials, options.credentials);
-                        }
-                        return callback(null, true, credentials);
+                        return callback(null, true, Object.assign({newsroom: options.tokens[token]},
+                            options.additionalCredentials));
                     }
                     return callback(null, false);
                 }

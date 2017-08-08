@@ -8,10 +8,10 @@ module.exports = {
     }),
     plan3Key: Joi.object({
         tokens: Joi.object().pattern(/\w+/, Joi.string()).required(),
-        credentials: Joi.object()
+        additionalCredentials: Joi.object()
     }),
     bearer: Joi.object({
         tokens: Joi.object().pattern(/\w+/, Joi.string()).required(),
-        credentials: Joi.object()
+        additionalCredentials: Joi.object()
     })
 };
