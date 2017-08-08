@@ -7,9 +7,11 @@ module.exports = {
         publicKey: Joi.string().required()
     }),
     plan3Key: Joi.object({
-        tokens: Joi.object().pattern(/\w+/, Joi.string()).required()
+        tokens: Joi.object().pattern(/\w+/, Joi.string()).required(),
+        credentials: Joi.object()
     }),
     bearer: Joi.object({
-        tokens: Joi.object().pattern(/\w+/, Joi.string()).required()
+        tokens: Joi.object().pattern(/\w+/, Joi.string()).required(),
+        credentials: Joi.object()
     })
 };
