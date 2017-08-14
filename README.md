@@ -1,5 +1,7 @@
 # Hapi Common Auth Plugin [![Build Status](https://travis-ci.org/plan3/cls-named-logger.svg?branch=master)](https://travis-ci.org/plan3/hapi-common-auth)
 
+An auth wrapper for hapi.js
+
 ## Installtion
 
 `npm install hapi-common-auth`
@@ -17,7 +19,9 @@ server.register({
     register: commonAuth,
     options: {
         jwt: {
-            publicKey: '...'
+            publicKey: 'public-key',
+            nonExpiringIds: ['allowed-id-1', 'allowed-id-2'], // optional
+            newsrooms: ['allowed-newsroom-1', 'allowed-newsroom-2'] // optional
         },
         bearer: {
             tokens: {...}

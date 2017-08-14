@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * @module 'hapi-common-auth'
+ * @description
+ * An auth wrapper for hapi.js.
+ */
 const jwtAuth = require('hapi-auth-jwt2');
 const bearerAuth = require('hapi-auth-bearer-token');
 const Joi = require('joi');
@@ -7,6 +12,8 @@ const Joi = require('joi');
 /**
  * @typedef {Object} JwtOptions
  * @property {string} publicKey
+ * @property {Array.<string>} nonExpiringIds Non expiring Id's list
+ * @property {Array.<string>} newsrooms Newsroom white list
  */
 /**
  * @typedef {Object} BearerOptions
@@ -50,7 +57,15 @@ const registerJwtStrategy = function(server, options) {
             server.auth.strategy('jwt', 'jwt', {
                 key: base64toPem(options.publicKey),
                 validateFunc: (decoded, request, callback) => {
-                    callback(null, true);
+                    if (!decoded.exp) {
+                        const nonExpiringIds = options.nonExpiringIds;
+                        const isValid = nonExpiringIds && decoded.jti && nonExpiringIds.indexOf(decoded.jti) > -1;
+                        callback(null, isValid);
+                    } else if (options.newsrooms && options.newsrooms.indexOf(decoded.newsroom) === -1) {
+                        callback(null, false);
+                    } else {
+                        callback(null, true);
+                    }
                 },
                 verifyOptions: {algorithms: ['RS256', 'RS384', 'RS512']},
                 tokenType: 'Plan3JWT'

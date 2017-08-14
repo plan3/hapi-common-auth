@@ -1,7 +1,7 @@
 {
   "name": "@plan3-relate/hapi-common-auth",
   "version": "1.2.0",
-  "description": "A wrapper for Hapi.js auth",
+  "description": "An auth wrapper for hapi.js",
   "main": "index.js",
   "scripts": {
     "test": "mocha test.js",

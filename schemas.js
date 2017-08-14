@@ -4,7 +4,9 @@ const Joi = require('joi');
 
 module.exports = {
     jwt: Joi.object({
-        publicKey: Joi.string().required()
+        publicKey: Joi.string().required(),
+        nonExpiringIds: Joi.array().items(Joi.string()).unique(),
+        newsrooms: Joi.array().items(Joi.string()).unique()
     }),
     plan3Key: Joi.object({
         tokens: Joi.object().pattern(/\w+/, Joi.string()).required(),
