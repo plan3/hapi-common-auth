@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * @module 'hapi-common-auth'
+ * @description
+ * An auth wrapper for hapi.js.
+ */
 const jwtAuth = require('hapi-auth-jwt2');
 const bearerAuth = require('hapi-auth-bearer-token');
 const Joi = require('joi');
@@ -7,6 +12,7 @@ const Joi = require('joi');
 /**
  * @typedef {Object} JwtOptions
  * @property {string} publicKey
+ * @property {Array.<string>} nonExpiringIds Non expiring Id's list
  */
 /**
  * @typedef {Object} BearerOptions
@@ -50,6 +56,11 @@ const registerJwtStrategy = function(server, options) {
             server.auth.strategy('jwt', 'jwt', {
                 key: base64toPem(options.publicKey),
                 validateFunc: (decoded, request, callback) => {
+                    if (!decoded.exp) {
+                        const isValid = options.nonExpiringIds
+                            && decoded.jti && options.nonExpiringIds.includes(decoded.jti);
+                        callback(null, isValid);
+                    }
                     callback(null, true);
                 },
                 verifyOptions: {algorithms: ['RS256', 'RS384', 'RS512']},

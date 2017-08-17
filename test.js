@@ -40,6 +40,40 @@ describe('Hapi common auth tests', function() {
         },
         expect: (err) => should.not.exist(err, 'Error should not be present')
     }, {
+        options: {
+            jwt: {
+                publicKey: 'some key',
+                nonExpiringIds: 'some list of non expiring ids'
+            }
+        },
+        expect: (err) => should.exist(err, 'Error should not be present')
+    }, {
+        options: {
+            jwt: {
+                publicKey: 'some key',
+                nonExpiringIds: {
+                    ids: 'some list of non expiring ids'
+                }
+            }
+        },
+        expect: (err) => should.exist(err, 'Error should not be present')
+    }, {
+        options: {
+            jwt: {
+                publicKey: 'some key',
+                nonExpiringIds: ['some non expiring id']
+            }
+        },
+        expect: (err) => should.not.exist(err, 'Error should not be present')
+    }, {
+        options: {
+            jwt: {
+                publicKey: 'some key',
+                nonExpiringIds: ['some non expiring id', 'some non expiring id']
+            }
+        },
+        expect: (err) => should.exist(err, 'Error should not be present')
+    }, {
         options: {bearer: ''},
         expect: (err) => should.exist(err, 'Error should be present')
     }, {
