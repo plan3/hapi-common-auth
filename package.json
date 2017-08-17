@@ -14,7 +14,9 @@
   },
   "keywords": [
     "hapi",
-    "auth"
+    "auth",
+    "bearer",
+    "jwt"
   ],
   "author": "Schibsted Media",
   "license": "MIT",

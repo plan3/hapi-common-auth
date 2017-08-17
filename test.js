@@ -43,6 +43,14 @@ describe('Hapi common auth tests', function() {
         options: {
             jwt: {
                 publicKey: 'some key',
+                nonExpiringIds: 'some list of non expiring ids'
+            }
+        },
+        expect: (err) => should.exist(err, 'Error should not be present')
+    }, {
+        options: {
+            jwt: {
+                publicKey: 'some key',
                 nonExpiringIds: {
                     ids: 'some list of non expiring ids'
                 }
@@ -65,50 +73,6 @@ describe('Hapi common auth tests', function() {
             }
         },
         expect: (err) => should.exist(err, 'Error should not be present')
-    }, {
-        options: {
-            jwt: {
-                publicKey: 'some key',
-                newsrooms: {
-                    ids: 'some list of newsrooms'
-                }
-            }
-        },
-        expect: (err) => should.exist(err, 'Error should not be present')
-    }, {
-        options: {
-            jwt: {
-                publicKey: 'some key',
-                newsrooms: ['some newsroom']
-            }
-        },
-        expect: (err) => should.not.exist(err, 'Error should not be present')
-    }, {
-        options: {
-            jwt: {
-                publicKey: 'some key',
-                newsrooms: ['some newsroom', 'some newsroom']
-            }
-        },
-        expect: (err) => should.exist(err, 'Error should not be present')
-    }, {
-        options: {
-            jwt: {
-                publicKey: 'some key',
-                nonExpiringIds: 'some list of non expiring ids',
-                newsrooms: 'some list of newsrooms'
-            }
-        },
-        expect: (err) => should.exist(err, 'Error should not be present')
-    }, {
-        options: {
-            jwt: {
-                publicKey: 'some key',
-                nonExpiringIds: ['some non expiring id'],
-                newsrooms: ['some newsroom']
-            }
-        },
-        expect: (err) => should.not.exist(err, 'Error should not be present')
     }, {
         options: {bearer: ''},
         expect: (err) => should.exist(err, 'Error should be present')

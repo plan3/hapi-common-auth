@@ -13,7 +13,6 @@ const Joi = require('joi');
  * @typedef {Object} JwtOptions
  * @property {string} publicKey
  * @property {Array.<string>} nonExpiringIds Non expiring Id's list
- * @property {Array.<string>} newsrooms Newsroom white list
  */
 /**
  * @typedef {Object} BearerOptions
@@ -58,14 +57,11 @@ const registerJwtStrategy = function(server, options) {
                 key: base64toPem(options.publicKey),
                 validateFunc: (decoded, request, callback) => {
                     if (!decoded.exp) {
-                        const nonExpiringIds = options.nonExpiringIds;
-                        const isValid = nonExpiringIds && decoded.jti && nonExpiringIds.indexOf(decoded.jti) > -1;
+                        const isValid = options.nonExpiringIds
+                            && decoded.jti && options.nonExpiringIds.includes(decoded.jti);
                         callback(null, isValid);
-                    } else if (options.newsrooms && options.newsrooms.indexOf(decoded.newsroom) === -1) {
-                        callback(null, false);
-                    } else {
-                        callback(null, true);
                     }
+                    callback(null, true);
                 },
                 verifyOptions: {algorithms: ['RS256', 'RS384', 'RS512']},
                 tokenType: 'Plan3JWT'
