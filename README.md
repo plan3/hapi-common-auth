@@ -21,7 +21,6 @@ server.register({
         jwt: {
             publicKey: 'public-key',
             nonExpiringIds: ['allowed-id-1', 'allowed-id-2'], // optional
-            newsrooms: ['allowed-newsroom-1', 'allowed-newsroom-2'] // optional
         },
         bearer: {
             tokens: {...}
