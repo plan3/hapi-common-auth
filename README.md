@@ -20,7 +20,7 @@ server.register({
     options: {
         jwt: {
             publicKey: 'public-key',
-            nonExpiringIds: ['allowed-id-1', 'allowed-id-2'], // optional
+            nonExpiringIds: ['allowed-id-1', 'allowed-id-2'] // optional
         },
         bearer: {
             tokens: {...}
