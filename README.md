@@ -4,7 +4,7 @@ An auth wrapper for hapi.js
 
 ## Installtion
 
-`npm install hapi-common-auth`
+`npm install @plan3-relate/hapi-common-auth`
 
 ## Usage
 
