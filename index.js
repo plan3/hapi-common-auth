@@ -59,9 +59,9 @@ const registerJwtStrategy = function(server, options) {
                     if (!decoded.exp) {
                         const isValid = options.nonExpiringIds
                             && decoded.jti && options.nonExpiringIds.includes(decoded.jti);
-                        callback(null, isValid);
+                        return callback(null, isValid);
                     }
-                    callback(null, true);
+                    return callback(null, true);
                 },
                 verifyOptions: {algorithms: ['RS256', 'RS384', 'RS512']},
                 tokenType: 'Plan3JWT'
