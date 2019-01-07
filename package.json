@@ -1,12 +1,11 @@
 {
   "name": "@plan3-relate/hapi-common-auth",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "An auth wrapper for hapi.js",
   "main": "index.js",
   "scripts": {
     "test": "mocha test.js",
-    "lint": "eslint .",
-    "nsp": "nsp check"
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -37,8 +36,7 @@
     "eslint": "4.18.2",
     "eslint-config-vgno": "7.0.0",
     "eslint-plugin-promise": "3.6.0",
-    "hapi": "16.5.2",
-    "mocha": "5.0.4",
-    "nsp": "3.2.1"
+    "hapi": "16.7.0",
+    "mocha": "5.0.4"
   }
 }
